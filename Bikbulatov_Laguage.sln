@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bikbulatov_Laguage", "Bikbulatov_Laguage\Bikbulatov_Laguage.csproj", "{223C00F6-8945-4D3F-91F2-286BC38EC12B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{67B8CA89-6CB3-421C-B747-AB1BACF1A5CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{223C00F6-8945-4D3F-91F2-286BC38EC12B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{223C00F6-8945-4D3F-91F2-286BC38EC12B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{223C00F6-8945-4D3F-91F2-286BC38EC12B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{223C00F6-8945-4D3F-91F2-286BC38EC12B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F8C2A03-0F19-45DB-AB7B-6D323535162E}
+	EndGlobalSection
+EndGlobal

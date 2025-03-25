@@ -1,0 +1,42 @@
+бикб сонтекст кс
+
+ private static BikbulatovLanguageEntities _context;
+
+        public static BikbulatovLanguageEntities GetContext()
+        {
+            if (_context == null)
+                _context = new BikbulatovLanguageEntities();
+
+            return _context;
+        }
+
+клиент пдж кс 
+
+InitializeComponent();
+            var currentsServices = BikbulatovLanguageEntities.GetContext().Client.ToList();
+            ClientListView.ItemsSource = currentsServices;
+
+клиент кс 
+
+public string RegistrationDataString
+        {
+            get
+            {
+                if (RegistrationDate != null)
+                {
+                    return RegistrationDate.ToShortDateString();
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        public string FIO
+        {
+            get
+            {
+                return $"{ID} {FirstName} {LastName} {Patronymic}";
+            }
+        }
