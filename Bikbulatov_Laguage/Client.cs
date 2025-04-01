@@ -65,7 +65,7 @@ namespace Bikbulatov_Laguage
         {
             get
             {
-                return $"{ID} {FirstName} {LastName} {Patronymic}";
+                return $" {LastName} {FirstName} {Patronymic}";
             }
         }
 
@@ -95,6 +95,21 @@ namespace Bikbulatov_Laguage
             get
             {
                 return Gender.Name;
+            }
+        }
+
+        public string LastDateTime
+        {
+            get
+            {
+                return ClientService.Where(p => p.ClientID == ID).Select(p => p.StartTime.ToShortDateString()).FirstOrDefault() ?? "нет";
+            }
+        }
+        public DateTime StartDataTime
+        {
+            get
+            {
+                return ClientService.Where(p => p.ClientID == ID).Select(p => p.StartTime).FirstOrDefault();
             }
         }
     }

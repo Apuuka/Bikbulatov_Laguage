@@ -47,5 +47,13 @@ namespace Bikbulatov_Laguage
             return _context;
         }
 
+        private static BikbulatovLanguageEntities1 _instance;
+        public static BikbulatovLanguageEntities1 getInstance()
+        {
+            if (_instance == null)
+                _instance = new BikbulatovLanguageEntities1();
+            return _instance;
+        }
+
     }
 }
