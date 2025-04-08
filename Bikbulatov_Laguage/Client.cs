@@ -15,14 +15,13 @@ namespace Bikbulatov_Laguage
 
     public partial class Client
     {
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Client()
         {
             this.ClientService = new HashSet<ClientService>();
             this.Tag = new HashSet<Tag>();
         }
-    
+
         public int ID { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
@@ -33,43 +32,31 @@ namespace Bikbulatov_Laguage
         public Nullable<System.DateTime> Birthday { get; set; }
         public string Email { get; set; }
         public System.DateTime RegistrationDate { get; set; }
-    
+
         public virtual Gender Gender { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClientService> ClientService { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tag> Tag { get; set; }
-        public string StartTimeDate
-        {
-            get
-            {
-                return ClientService.Where(p => p.ClientID == ID).Select(p => p.StartTime.ToShortDateString()).FirstOrDefault() ?? "нет";
-            }
-        }
-        public string RegistrationDataString
-        {
-            get
-            {
-                if (RegistrationDate != null)
-                {
-                    return RegistrationDate.ToShortDateString();
-                }
-                else
-                {
-                    return "";
-                }
-            }
-        }
 
         public string FIO
         {
             get
             {
-                return $" {LastName} {FirstName} {Patronymic}";
+                return $"{LastName} {FirstName} {Patronymic}";
             }
         }
-
-        public string BirthdayString
+        public string ClientPhotoPath
+        {
+            get
+            {
+                if (PhotoPath != null)
+                    return $@"Клиенты\{PhotoPath}";
+                else
+                    return null;
+            }
+        }
+        public string DateBirthString
         {
             get
             {
@@ -78,16 +65,19 @@ namespace Bikbulatov_Laguage
                     return Birthday.Value.ToShortDateString();
                 }
                 else
-                    return "";
+                    return null;
             }
         }
-
-        public int VisitCount
+        public string RegistrationDateString
         {
             get
             {
-                var datelist = ClientService.Where(p => p.ClientID == this.ID).ToList();
-                return datelist.Count;
+                if (RegistrationDate != null)
+                {
+                    return RegistrationDate.ToShortDateString();
+                }
+                else
+                    return null;
             }
         }
         public string GenderName
@@ -97,19 +87,33 @@ namespace Bikbulatov_Laguage
                 return Gender.Name;
             }
         }
-
-        public string LastDateTime
+        public string LastDateTimeString
         {
             get
             {
-                return ClientService.Where(p => p.ClientID == ID).Select(p => p.StartTime.ToShortDateString()).FirstOrDefault() ?? "нет";
+                //var allDateVisits = ClientService.Where(p => p.ClientID == this.ID).Select(p => p.StartTime.ToShortDateString()).FirstOrDefault() ?? "нет";
+                var allDateVisits = ClientService.Where(p => p.ClientID == this.ID).Select(p => p.StartTime.ToShortDateString());
+                if (allDateVisits.Count() > 0)
+                    return allDateVisits.Max();
+                return "нет";
             }
         }
-        public DateTime StartDataTime
+        public DateTime? LastDateTime
         {
             get
             {
-                return ClientService.Where(p => p.ClientID == ID).Select(p => p.StartTime).FirstOrDefault();
+                DateTime? lastVisit = null;
+                var allDateVisits = ClientService.Where(p => p.ClientID == this.ID).Select(p => p.StartTime);
+                if (allDateVisits.Count() > 0)
+                    lastVisit = allDateVisits.Max();
+                return lastVisit;
+            }
+        }
+        public int VisitCount
+        {
+            get
+            {
+                return ClientService.Where(p => p.ClientID == this.ID).ToList().Count();
             }
         }
     }

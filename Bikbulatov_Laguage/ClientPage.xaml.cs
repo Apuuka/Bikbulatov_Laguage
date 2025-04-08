@@ -15,9 +15,12 @@ using System.Windows.Shapes;
 
 namespace Bikbulatov_Laguage
 {
+    /// <summary>
+    /// Логика взаимодействия для ClientPage.xaml
+    /// </summary>
     public partial class ClientPage : Page
     {
-        public int CountRecords, CountPage, CurrentPage = 0;
+        public int CountRecords, CountPage, CurrentPage = 0, ALLClientCount;
         List<Client> CurrentClientList = new List<Client>();
         List<Client> TableList;
 
@@ -30,12 +33,15 @@ namespace Bikbulatov_Laguage
             ClientListView.ItemsSource = currentClients;
 
             SortComboBox.SelectedIndex = 0;
+            SortComboBox1.SelectedIndex = 0;
+            FiltrComboBox.SelectedIndex = 0;
 
-            UpdateProducts();
+            UpdateClients();
         }
-        public void UpdateProducts()
+        public void UpdateClients()
         {
             var currentAgents = BikbulatovLanguageEntities1.getInstance().Client.ToList();
+            ALLClientCount = BikbulatovLanguageEntities1.getInstance().Client.Count();
 
             if (SortComboBox1.SelectedIndex == 0)
             {
@@ -47,7 +53,7 @@ namespace Bikbulatov_Laguage
             }
             if (SortComboBox1.SelectedIndex == 2)
             {
-                currentAgents = currentAgents.OrderByDescending(p => p.StartDataTime).ToList();
+                currentAgents = currentAgents.OrderByDescending(p => p.LastDateTime).ToList();
             }
             if (SortComboBox1.SelectedIndex == 3)
             {
@@ -67,10 +73,9 @@ namespace Bikbulatov_Laguage
                 currentAgents = currentAgents.Where(p => Convert.ToString(p.GenderName) == "мужской").ToList();
             }
 
-            currentAgents = currentAgents.Where(p => p.FIO.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.Email.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.Phone.ToLower().Replace(" ", "").Replace("(", "").Replace(")", "").Replace("-", "").Contains(TBoxSearch.Text.ToLower())).ToList();
+            currentAgents = currentAgents.Where(p => p.FIO.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.Email.ToLower().Contains(TBoxSearch.Text.ToLower()) || p.Phone.ToLower().Replace("(", "").Replace(")", "").Replace("+", "").Replace("-", "").Replace(" ", "").Contains(TBoxSearch.Text.ToLower().Replace("(", "").Replace(")", "").Replace("+", "").Replace("-", "").Replace(" ", ""))).ToList();
             ClientListView.ItemsSource = currentAgents;
-
-
+            TBCount.Text = currentAgents.Count().ToString();
             TableList = currentAgents;
             ChangePage(0, 0);
         }
@@ -92,22 +97,42 @@ namespace Bikbulatov_Laguage
 
         private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateProducts();
+            UpdateClients();
         }
 
         private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateProducts();
+            UpdateClients();
         }
 
         private void FiltrComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateProducts();
+            UpdateClients();
         }
 
         private void SortComboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateProducts();
+            UpdateClients();
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+
+        private void Grid_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Visibility == Visibility.Visible)
+            {
+                BikbulatovLanguageEntities1.getInstance().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+                ClientListView.ItemsSource = BikbulatovLanguageEntities1.getInstance().Client.ToList();
+                UpdateClients();
+            }
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Client));
         }
 
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
@@ -129,7 +154,7 @@ namespace Bikbulatov_Laguage
 
                         ClientListView.ItemsSource = BikbulatovLanguageEntities1.getInstance().Client.ToList();
 
-                        UpdateProducts();
+                        UpdateClients();
                     }
                     catch (Exception ex)
                     {
@@ -252,8 +277,7 @@ namespace Bikbulatov_Laguage
                 PageListBox.SelectedIndex = CurrentPage;
 
                 min = CurrentPage * currentRecordsOnPage + currentRecordsOnPage < CountRecords ? CurrentPage * currentRecordsOnPage + currentRecordsOnPage : CountRecords;
-                TBCount.Text = min.ToString();
-                TBAllRecords.Text = $" из {CountRecords.ToString()}";
+                TBAllRecords.Text = $" из {ALLClientCount.ToString()}";
 
                 ClientListView.ItemsSource = CurrentClientList;
 
